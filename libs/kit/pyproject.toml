@@ -1,0 +1,10 @@
+[project]
+name = "logiclab-kit"
+version = "0.1.0"
+dependencies = [
+    "agno==2.3.19",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

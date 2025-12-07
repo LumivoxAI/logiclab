@@ -1,0 +1,50 @@
+[project]
+name = "logiclab"
+version = "0.1.0"
+description = "Lumivox AI logic lab"
+requires-python = ">=3.12,<3.14"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+keywords = ["ai", "agent"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[tool.uv.workspace]
+members = [
+    "libs/*",
+    "agents/*",
+    "tools/*",
+]
+
+[dependency-groups]
+dev = [
+    "logiclab-core",
+    "logiclab-kit",
+
+    "agent-dev",
+    "agent-librarian",
+
+    "tool-book",
+    "tool-weather",
+]
+
+[tool.uv.sources]
+logiclab-core = { workspace = true }
+logiclab-kit = { workspace = true }
+agent-dev = { workspace = true }
+agent-librarian = { workspace = true }
+tool-book = { workspace = true }
+tool-weather = { workspace = true }
+
+[project.urls]
+Homepage = "https://github.com/LumivoxAI/logiclab"
+Documentation = "https://github.com/LumivoxAI/logiclab"
+Issues = "https://github.com/LumivoxAI/logiclab/issues"

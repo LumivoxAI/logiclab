@@ -1,0 +1,12 @@
+[project]
+name = "agent-dev"
+version = "0.1.0"
+dependencies = [
+    "logiclab-core",
+    "logiclab-kit",
+    "agno",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
