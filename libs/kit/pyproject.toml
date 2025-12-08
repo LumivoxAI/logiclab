@@ -3,6 +3,7 @@ name = "logiclab-kit"
 version = "0.1.0"
 dependencies = [
     "agno==2.3.19",
+    "openai==2.14.0",
 ]
 
 [build-system]
