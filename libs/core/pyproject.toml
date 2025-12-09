@@ -2,8 +2,6 @@
 name = "logiclab-core"
 version = "0.1.0"
 dependencies = [
-    "agno",
-    "openai==2.14.0",
     "structlog==25.5.0",
     "httpx[http2,socks]==0.28.1",
     "fastapi[standard]==0.126.0",

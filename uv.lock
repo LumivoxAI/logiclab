@@ -535,20 +535,16 @@ name = "logiclab-core"
 version = "0.1.0"
 source = { editable = "libs/core" }
 dependencies = [
-    { name = "agno" },
     { name = "fastapi", extra = ["standard"] },
     { name = "httpx", extra = ["http2", "socks"] },
-    { name = "openai" },
     { name = "python-logging-loki-v2" },
     { name = "structlog" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "agno" },
     { name = "fastapi", extras = ["standard"], specifier = "==0.126.0" },
     { name = "httpx", extras = ["http2", "socks"], specifier = "==0.28.1" },
-    { name = "openai", specifier = "==2.14.0" },
     { name = "python-logging-loki-v2", specifier = "==1.1.1" },
     { name = "structlog", specifier = "==25.5.0" },
 ]
@@ -559,10 +555,14 @@ version = "0.1.0"
 source = { editable = "libs/kit" }
 dependencies = [
     { name = "agno" },
+    { name = "openai" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "agno", specifier = "==2.3.19" }]
+requires-dist = [
+    { name = "agno", specifier = "==2.3.19" },
+    { name = "openai", specifier = "==2.14.0" },
+]
 
 [[package]]
 name = "markdown-it-py"
