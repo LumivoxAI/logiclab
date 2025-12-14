@@ -1,9 +1,8 @@
 import uuid
 from typing import Any
 
+from agno.models.metrics import Metrics
 from openai.types.responses import (
-    Response,
-    ResponseUsage,
     ResponseOutputText,
     ResponseCreatedEvent,
     ResponseOutputMessage,
@@ -15,10 +14,8 @@ from openai.types.responses import (
     ResponseOutputItemAddedEvent,
     ResponseContentPartAddedEvent,
 )
-from openai.types.responses.response_usage import (
-    InputTokensDetails,
-    OutputTokensDetails,
-)
+
+from .response_builder import ResponseBuilder
 
 
 class SequenceNumberCounter:
@@ -194,42 +191,11 @@ class ResponseStream:
         self._output_items = []
         self._output_index: int = -1
         self._sequence_number = SequenceNumberCounter(start=1)
-        self._response = Response(
-            id=id,
-            created_at=created_at,
-            error=None,
-            incomplete_details=None,
-            instructions=None,
-            metadata=None,
-            model=model,
-            object="response",
-            output=[],
-            parallel_tool_calls=True,  # ???
-            temperature=None,
-            tool_choice="auto",  # ???
-            tools=[],
-            top_p=None,
-            background=None,
-            conversation=None,
-            max_output_tokens=None,
-            max_tool_calls=None,
-            previous_response_id=None,
-            prompt=None,
-            prompt_cache_key=None,
-            prompt_cache_retention=None,
-            reasoning=None,
-            safety_identifier=None,
-            service_tier=None,
-            status="in_progress",
-            top_logprobs=None,
-            truncation=None,
-            usage=None,
-            user=None,
-        )
+        self._response = ResponseBuilder(id, created_at, model).status("in_progress")
 
     def enter(self) -> ResponseCreatedEvent:
         return ResponseCreatedEvent(
-            response=self._response,
+            response=self._response.build(),
             sequence_number=self._sequence_number(),
             type="response.created",
         )
@@ -240,21 +206,17 @@ class ResponseStream:
         self._output_items.append(item)
         return item
 
-    def exit(self, metrics: Any | None) -> ResponseCompletedEvent:
-        self._response.status = "completed"
-        self._response.output = [
-            item.content_item for item in self._output_items if item.content_item is not None
-        ]
-        if metrics is not None:
-            self._response.usage = ResponseUsage(
-                input_tokens=metrics.input_tokens,
-                input_tokens_details=InputTokensDetails(cached_tokens=0),
-                output_tokens=metrics.output_tokens,
-                output_tokens_details=OutputTokensDetails(reasoning_tokens=0),
-                total_tokens=metrics.total_tokens,
+    def exit(self, metrics: Metrics | None) -> ResponseCompletedEvent:
+        response = (
+            self._response.output(
+                [item.content_item for item in self._output_items if item.content_item is not None]
             )
+            .status("completed")
+            .metrics(metrics)
+            .build()
+        )
         return ResponseCompletedEvent(
-            response=self._response,
+            response=response,
             sequence_number=self._sequence_number(),
             type="response.completed",
         )
