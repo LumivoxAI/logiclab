@@ -65,7 +65,7 @@ class OutputItemContext:
         return self._content
 
 
-class OutputTextContentPart:
+class ResponseTextPart:
     def __init__(
         self,
         ctx: OutputItemContext,
@@ -137,7 +137,7 @@ class OutputTextContentPart:
         )
 
 
-class OutputItem:
+class ResponseOutputItem:
     def __init__(
         self,
         output_index: int,
@@ -162,8 +162,8 @@ class OutputItem:
             type="response.output_item.added",
         )
 
-    def add_text_content_part(self) -> OutputTextContentPart:
-        return OutputTextContentPart(self._ctx)
+    def new_text_part(self) -> ResponseTextPart:
+        return ResponseTextPart(self._ctx)
 
     def exit(self) -> ResponseOutputItemDoneEvent:
         ctx = self._ctx
@@ -200,9 +200,9 @@ class ResponseStream:
             type="response.created",
         )
 
-    def add_output_item(self) -> OutputItem:
+    def new_output_item(self) -> ResponseOutputItem:
         self._output_index += 1
-        item = OutputItem(self._output_index, self._sequence_number)
+        item = ResponseOutputItem(self._output_index, self._sequence_number)
         self._output_items.append(item)
         return item
 
